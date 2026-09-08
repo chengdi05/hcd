@@ -10,7 +10,7 @@ spec:
     image: docker.m.daocloud.io/jenkins/inbound-agent:latest
     imagePullPolicy: IfNotPresent
   - name: kaniko
-    image: docker.m.daocloud.io/gcr.io/kaniko-project/executor:debug
+    image: gcr.m.daocloud.io/kaniko-project/executor:debug
     imagePullPolicy: IfNotPresent
     command: ["sleep"]
     args: ["infinity"]
@@ -46,7 +46,7 @@ spec:
                     /kaniko/executor \
                       --dockerfile=Dockerfile \
                       --context=dir://${WORKSPACE} \
-                      --destination=registry.cn-hangzhou.aliyuncs.com/hcd05/wordpress:${BUILD_NUMBER} \
+                      --destination=crpi-69r1pblz1wfwkvgdh.cn-hangzhou.personal.cr.aliyuncs.com/hcd/wordpress:${BUILD_NUMBER} \
                       --cache=true
                     '''
                 }
@@ -56,7 +56,7 @@ spec:
             steps {
                 container('kubectl') {
                     sh '''
-                    kubectl set image deployment/wordpress wordpress=registry.cn-hangzhou.aliyuncs.com/hcd05/wordpress:${BUILD_NUMBER} -n devops
+                    kubectl set image deployment/wordpress wordpress=crpi-69r1pblz1wfwkvgdh.cn-hangzhou.personal.cr.aliyuncs.com/hcd/wordpress:${BUILD_NUMBER} -n devops
                     kubectl rollout status deployment/wordpress -n devops
                     '''
                 }
