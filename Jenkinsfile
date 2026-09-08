@@ -7,22 +7,29 @@ kind: Pod
 spec:
   containers:
   - name: jnlp
-    image: jenkins/inbound-agent:latest
+    image: docker.m.daocloud.io/jenkins/inbound-agent:latest
+    imagePullPolicy: IfNotPresent
   - name: kaniko
-    image: gcr.io/kaniko-project/executor:debug
+    image: docker.m.daocloud.io/gcr.io/kaniko-project/executor:debug
+    imagePullPolicy: IfNotPresent
     command: ["sleep"]
     args: ["infinity"]
     volumeMounts:
     - name: docker-config
-      mountPath: /kaniko/.docker/
+      mountPath: /kaniko/.docker/config.json
+      subPath: config.json
   - name: kubectl
-    image: bitnami/kubectl:latest
+    image: docker.m.daocloud.io/bitnami/kubectl:latest
+    imagePullPolicy: IfNotPresent
     command: ["sleep"]
     args: ["infinity"]
   volumes:
   - name: docker-config
     secret:
       secretName: acr-credentials
+      items:
+      - key: .dockerconfigjson
+        path: config.json
 """
         }
     }
