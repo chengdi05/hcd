@@ -19,10 +19,12 @@ spec:
       mountPath: /kaniko/.docker/config.json
       subPath: config.json
   - name: kubectl
-    image: docker.m.daocloud.io/dtzar/helm-kubectl:latest
+    image: docker.m.daocloud.io/alpine/kubectl:latest
     imagePullPolicy: IfNotPresent
     command: ["sleep"]
     args: ["infinity"]
+    securityContext:
+      runAsUser: 0
   volumes:
   - name: docker-config
     secret:
