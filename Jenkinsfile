@@ -1,3 +1,4 @@
+# auto-trigger test 2026-09-09
 pipeline {
     agent {
         kubernetes {
