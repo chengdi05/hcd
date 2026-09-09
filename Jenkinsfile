@@ -19,7 +19,7 @@ spec:
       mountPath: /kaniko/.docker/config.json
       subPath: config.json
   - name: kubectl
-    image: docker.m.daocloud.io/bitnami/kubectl:latest
+    image: docker.m.daocloud.io/dtzar/helm-kubectl:latest
     imagePullPolicy: IfNotPresent
     command: ["sleep"]
     args: ["infinity"]
