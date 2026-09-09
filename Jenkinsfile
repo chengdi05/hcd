@@ -46,7 +46,8 @@ spec:
                     /kaniko/executor \
                       --dockerfile=Dockerfile \
                       --context=dir://${WORKSPACE} \
-                      --destination=crpi-69r1pblz1wfwkvgdh.cn-hangzhou.personal.cr.aliyuncs.com/hcd/wordpress:${BUILD_NUMBER} \
+                      --destination=192.168.49.2:30500/hcd/wordpress:${BUILD_NUMBER} \
+                      --insecure-registry=192.168.49.2:30500 \
                       --cache=true
                     '''
                 }
@@ -56,7 +57,12 @@ spec:
             steps {
                 container('kubectl') {
                     sh '''
-                    kubectl set image deployment/wordpress wordpress=crpi-69r1pblz1wfwkvgdh.cn-hangzhou.personal.cr.aliyuncs.com/hcd/wordpress:${BUILD_NUMBER} -n devops
+                    export KUBECONFIG=/tmp/kubeconfig
+                    kubectl config set-cluster in-cluster --server=https://kubernetes.default.svc --insecure-skip-tls-verify=true
+                    kubectl config set-credentials jenkins-sa --token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+                    kubectl config set-context jenkins-ctx --cluster=in-cluster --user=jenkins-sa
+                    kubectl config use-context jenkins-ctx
+                    kubectl set image deployment/wordpress wordpress=192.168.49.2:30500/hcd/wordpress:${BUILD_NUMBER} -n devops
                     kubectl rollout status deployment/wordpress -n devops
                     '''
                 }
